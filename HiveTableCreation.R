@@ -19,27 +19,28 @@ sc <- sparkR.init(appName="TripRoadClass")
 sqlContext <- sparkRSQL.init(sc)
 hiveContext <- sparkRHive.init(sc)
   
-road.class.index <- c(41000,42000,43000,44000,45000,47000,51000,52000,53000,54000)
-day.roadlevel.name <- c('deviceid', 'tripnumber', 'duration', 'mileage', 'speed_mean', 'speed_sd', 
+road.class.index <- 1:4
+day.roadlevel.name <- c('deviceid', 'tripnumber', 'duration', 'mileage', 'speed_mean', 'speed_sd', 'acc_sd', 
                         paste('speed',seq(0,100,5),'pct',sep='_'), paste('speed',seq(0,150,10),c(seq(10,150,10),Inf),sep='_'), 
+                        'duration_still',
                         paste('m',0:23,1:24,sep='_'), paste('road', road.class.index, 'duration', sep = '_'), 
                         paste('road', road.class.index, 'mileage', sep = '_'), 
                         unlist(lapply(paste('road', road.class.index, sep='_'), 
                                       function(x){
                                         paste(x, c('speed_mean', paste('speed',seq(0,100,25),sep='_'),'speed_sd','acc_sd'), sep = '_')
                                       }))
-)
+                        )
 
 
 sql(hiveContext, "DROP TABLE IF EXISTS trip_road_feature")
 sql(hiveContext, paste("CREATE EXTERNAL TABLE IF NOT EXISTS trip_road_feature(", 
                        paste(paste(day.roadlevel.name[1], " BIGINT", sep = ''), 
                              paste(day.roadlevel.name[2:3], " INT", collapse = ',\n', sep = ''), 
-                             paste(day.roadlevel.name[4:27], " DOUBLE", collapse = ',\n', sep = ''), 
-                             paste(day.roadlevel.name[28:43], " INT", collapse = ',\n', sep = ''), 
-                             paste(day.roadlevel.name[44:67], " DOUBLE", collapse = ',\n', sep = ''), 
-                             paste(day.roadlevel.name[68:77], " INT", collapse = ',\n', sep = ''), 
-                             paste(day.roadlevel.name[78:167], " DOUBLE", collapse = ',\n', sep = ''), 
+                             paste(day.roadlevel.name[4:28], " DOUBLE", collapse = ',\n', sep = ''), 
+                             paste(day.roadlevel.name[29:45], " INT", collapse = ',\n', sep = ''), 
+                             paste(day.roadlevel.name[46:69], " DOUBLE", collapse = ',\n', sep = ''), 
+                             paste(day.roadlevel.name[70:73], " INT", collapse = ',\n', sep = ''), 
+                             paste(day.roadlevel.name[74:109], " DOUBLE", collapse = ',\n', sep = ''), 
                              sep = ',\n'), 
                        ")\nPARTITIONED BY(\nstat_date string\n)", 
                        "ROW FORMAT DELIMITED FIELDS TERMINATED BY \',\'", 
