@@ -129,7 +129,7 @@ for (i in 1:length(days)){
                                                      trip.data$period <- hour(as.POSIXlt(trip.data$time_stamp, origin='1970-01-01 00:00:00'))
                                                      trip.data[trip.data$roadlevel_fix == 41000, 'roadlevel_fix'] <- 1
                                                      trip.data[trip.data$roadlevel_fix == 42000, 'roadlevel_fix'] <- 2
-                                                     trip.data[trip.data$roadlevel_fix %in% c(42000,44000,51000,52000,53000), 'roadlevel_fix'] <- 3
+                                                     trip.data[trip.data$roadlevel_fix %in% c(42000,43000,51000,52000,53000), 'roadlevel_fix'] <- 3
                                                      trip.data[trip.data$roadlevel_fix %in% c(45000,47000,54000), 'roadlevel_fix'] <- 4
                                                      road.class.index <- 1:4
                                                      
