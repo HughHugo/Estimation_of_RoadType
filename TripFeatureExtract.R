@@ -128,8 +128,8 @@ for (i in 1:length(days)){
                                                                        0)
                                                      trip.data$period <- hour(as.POSIXlt(trip.data$time_stamp, origin='1970-01-01 00:00:00'))
                                                      trip.data[trip.data$roadlevel_fix == 41000, 'roadlevel_fix'] <- 1
-                                                     trip.data[trip.data$roadlevel_fix == 42000, 'roadlevel_fix'] <- 2
-                                                     trip.data[trip.data$roadlevel_fix %in% c(42000,43000,51000,52000,53000), 'roadlevel_fix'] <- 3
+                                                     trip.data[trip.data$roadlevel_fix == 43000, 'roadlevel_fix'] <- 2
+                                                     trip.data[trip.data$roadlevel_fix %in% c(42000,44000,51000,52000,53000), 'roadlevel_fix'] <- 3
                                                      trip.data[trip.data$roadlevel_fix %in% c(45000,47000,54000), 'roadlevel_fix'] <- 4
                                                      road.class.index <- 1:4
                                                      
@@ -143,7 +143,7 @@ for (i in 1:length(days)){
                                                                         length(which(trip.data$speed==0)), 
                                                                         t(IntervalTime(trip.data$speed, name = 'speed', min = 0, max = 150, 
                                                                                        gap = 10, inf.plus = T, inf.minus = F)), 
-                                                                        unlist(lapply(1:24,function(x) sum(trip.data[which(trip.data$period==x),'am'], na.rm = T))), 
+                                                                        unlist(lapply(0:23,function(x) sum(trip.data[which(trip.data$period==x),'am'], na.rm = T))), 
                                                                         unlist(lapply(road.class.index, function(x) length(which(trip.data$roadlevel_fix==x)))), 
                                                                         unlist(lapply(road.class.index, 
                                                                                       function(x) sum(trip.data[trip.data$roadlevel_fix==x, 'am'], na.rm = T))), 
@@ -164,8 +164,9 @@ for (i in 1:length(days)){
   
   road.class.index <- 1:4
   day.roadlevel.name <- c('deviceid', 'tripnumber', 'duration', 'mileage', 'speed_mean', 'speed_sd', 'acc_sd', 
-                          paste('speed',seq(0,100,5),'pct',sep='_'), paste('speed',seq(0,150,10),c(seq(10,150,10),Inf),sep='_'), 
-                          'duration_still',
+                          paste('speed',seq(0,100,5),'pct',sep='_'), 
+                          'duration_still', 
+                          paste('speed',seq(0,150,10),c(seq(10,150,10),Inf),sep='_'), 
                           paste('m',0:23,1:24,sep='_'), paste('road', road.class.index, 'duration', sep = '_'), 
                           paste('road', road.class.index, 'mileage', sep = '_'), 
                           unlist(lapply(paste('road', road.class.index, sep='_'), 
